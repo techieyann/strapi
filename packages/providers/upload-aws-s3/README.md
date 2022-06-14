@@ -25,6 +25,7 @@ npm install @strapi/provider-upload-aws-s3 --save
 
 - `provider` defines the name of the provider
 - `providerOptions` is passed down during the construction of the provider. (ex: `new AWS.S3(config)`). [Complete list of options](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#constructor-property)
+  - `cdn` is an optional field to set a CDN URL, likely cloudfront
 - `actionOptions` is passed directly to the parameters to each method respectively. You can find the complete list of [upload/ uploadStream options](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#upload-property) and [delete options](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#deleteObject-property)
 
 See the [documentation about using a provider](https://docs.strapi.io/developer-docs/latest/plugins/upload.html#using-a-provider) for information on installing and using a provider. To understand how environment variables are used in Strapi, please refer to the [documentation about environment variables](https://docs.strapi.io/developer-docs/latest/setup-deployment-guides/configurations/optional/environment.html#environment-variables).
@@ -46,6 +47,8 @@ module.exports = ({ env }) => ({
         params: {
           Bucket: env('AWS_BUCKET'),
         },
+        // optional
+        cdn: env('CDN_URL'),
       },
       actionOptions: {
         upload: {},
@@ -79,14 +82,14 @@ module.exports = [
             'data:',
             'blob:',
             'dl.airtable.com',
-            'yourBucketName.s3.yourRegion.amazonaws.com',
+            'yourBucketName.s3.yourRegion.amazonaws.com', // or your CDN URL if you set it above
           ],
           'media-src': [
             "'self'",
             'data:',
             'blob:',
             'dl.airtable.com',
-            'yourBucketName.s3.yourRegion.amazonaws.com',
+            'yourBucketName.s3.yourRegion.amazonaws.com', // or your CDN URL if you set it above
           ],
           upgradeInsecureRequests: null,
         },

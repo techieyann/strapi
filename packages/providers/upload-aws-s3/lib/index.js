@@ -32,9 +32,12 @@ module.exports = {
             if (err) {
               return reject(err);
             }
-
-            // set the bucket file url
-            file.url = data.Location;
+            // prepend with cdn URL if set
+            if (config.cdn) {
+              file.url = `${config.cdn}${data.Key}`;
+            } else {
+              file.url = data.Location;
+            }
 
             resolve();
           }
